@@ -1,22 +1,184 @@
+body {
+  box-sizing: border-box;
+  background-color: #eaeaeb;
+  --padding-base: 25px;
+  --darkest-color: #4768c5;
+  --darkest-color-offset: #859ce4;
+  --lightest-color: #faf6f5;
+  --lightest-color-offset: #e5dcd7e0;
+  --highlight-color: #fc7a85;
+  --screen-color: #98a39d;
+  height: 100vh;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
+#root {
+  display: grid;
+  place-items: center;
+  height: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#wrapper {
+  display: grid;
+  grid-auto-columns: minmax(20px, auto);
+
+  grid-template-areas:
+    "disp disp disp disp"
+    "inp inp inp inp"
+    "ac ac oDiv oMult"
+    "seven eight nine oSub"
+    "four five six oPlus"
+    "one two three oEquals"
+    "eZero eZero oDot oEquals";
+  grid-gap: 7px;
+  padding: var(--padding-base);
+  border: 1px solid #111;
+  border-radius: 10px;
+  background: var(--lightest-color-offset);
+
+  box-shadow: 13px 13px 15px #222, inset 0 0 20px var(--darkest-color);
+  height: 50vh;
+  width: 20vw;
+  margin: 0 auto;
+  justify-items: center;
+  background: var(--lightest-color);
+  top: 50%;
+}
+
+#wrapper * {
+  border-radius: 10px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin: 0 auto;
+  font-size: 3em;
+  font-weight: 900;
+  cursor: pointer;
+  text-align: center;
 }
 
-.App-link {
-  color: #09d3ac;
+#wrapper *:hover {
+  box-shadow: inset 1px 1px 5px black;
+  transition: ease 0.2s;
+}
+
+#disp {
+  background: var(--lightest-color-offset);
+  box-shadow: inset 1px 1px 5px black;
+  color: black;
+  grid-area: disp;
+  width: 100%;
+  height: 100%;
+  min-height: 40px;
+  font-size: 1.5em;
+}
+
+#inp {
+  display: inline-block;
+  text-align: right;
+  padding: 0 2px 0 2px;
+  background: var(--screen-color);
+  grid-area: inp;
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  color: black;
+  min-height: 40px;
+  font-size: 2.5em;
+  font-weight: 600;
+}
+
+#inp:hover {
+  box-shadow: none;
+}
+
+#ac,
+#oDiv,
+#oMult,
+#oSub,
+#oPlus,
+#oEquals,
+#oDot {
+  background: var(--darkest-color-offset);
+  color: var(--lightest-color);
+  height: 100%;
+  width: 100%;
+  box-shadow: 3px 3px #000;
+}
+
+#eZero,
+#one,
+#two,
+#three,
+#four,
+#five,
+#six,
+#seven,
+#eight,
+#nine {
+  background: var(--lightest-color);
+  color: var(--darkest-color);
+  height: 100%;
+  width: 100%;
+  box-shadow: 3px 3px #000;
+}
+
+#eZero {
+  grid-area: eZero;
+}
+
+#one {
+  grid-area: one;
+}
+
+#two {
+  grid-area: two;
+}
+#three {
+  grid-area: three;
+}
+#four {
+  grid-area: four;
+}
+#five {
+  grid-area: five;
+}
+#six {
+  grid-area: six;
+}
+#seven {
+  grid-area: seven;
+}
+#eight {
+  grid-area: eight;
+}
+#nine {
+  grid-area: nine;
+}
+#oDiv {
+  grid-area: oDiv;
+}
+#oMult {
+  grid-area: oMult;
+}
+#oSub {
+  grid-area: oSub;
+}
+#oPlus {
+  grid-area: oPlus;
+}
+#oDot {
+  grid-area: oDot;
+}
+#oEquals {
+  grid-area: oEquals;
+}
+
+#ac {
+  grid-area: ac;
+  color: var(--highlight-color);
+  background: var(--lightest-color-offset);
 }
