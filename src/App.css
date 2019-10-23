@@ -26,13 +26,13 @@ body {
   grid-auto-columns: minmax(20px, auto);
 
   grid-template-areas:
-    "disp disp disp disp"
+    "display display display display"
     "inp inp inp inp"
-    "ac ac oDiv oMult"
-    "seven eight nine oSub"
-    "four five six oPlus"
-    "one two three oEquals"
-    "eZero eZero oDot oEquals";
+    "clear clear divide multiply"
+    "seven eight nine subtract"
+    "four five six add"
+    "one two three equals"
+    "zero zero decimal equals";
   grid-gap: 7px;
   padding: var(--padding-base);
   border: 1px solid #111;
@@ -40,7 +40,7 @@ body {
   background: var(--lightest-color-offset);
 
   box-shadow: 13px 13px 15px #222, inset 0 0 20px var(--darkest-color);
-  height: 50vh;
+
   width: 20vw;
   margin: 0 auto;
   justify-items: center;
@@ -65,11 +65,11 @@ body {
   transition: ease 0.2s;
 }
 
-#disp {
+#display {
   background: var(--lightest-color-offset);
   box-shadow: inset 1px 1px 5px black;
   color: black;
-  grid-area: disp;
+  grid-area: display;
   width: 100%;
   height: 100%;
   min-height: 40px;
@@ -83,25 +83,26 @@ body {
   background: var(--screen-color);
   grid-area: inp;
   width: 100%;
-  height: 100%;
+  height: 90%;
   border: 1px solid black;
   color: black;
   min-height: 40px;
-  font-size: 2.5em;
+  font-size: 2em;
   font-weight: 600;
+  overflow: hidden;
 }
 
 #inp:hover {
   box-shadow: none;
 }
 
-#ac,
-#oDiv,
-#oMult,
-#oSub,
-#oPlus,
-#oEquals,
-#oDot {
+#clear,
+#divide,
+#multiply,
+#subtract,
+#add,
+#equals,
+#decimal {
   background: var(--darkest-color-offset);
   color: var(--lightest-color);
   height: 100%;
@@ -109,7 +110,7 @@ body {
   box-shadow: 3px 3px #000;
 }
 
-#eZero,
+#zero,
 #one,
 #two,
 #three,
@@ -126,8 +127,8 @@ body {
   box-shadow: 3px 3px #000;
 }
 
-#eZero {
-  grid-area: eZero;
+#zero {
+  grid-area: zero;
 }
 
 #one {
@@ -158,27 +159,27 @@ body {
 #nine {
   grid-area: nine;
 }
-#oDiv {
-  grid-area: oDiv;
+#divide {
+  grid-area: divide;
 }
-#oMult {
-  grid-area: oMult;
+#multiply {
+  grid-area: multiply;
 }
-#oSub {
-  grid-area: oSub;
+#subtract {
+  grid-area: subtract;
 }
-#oPlus {
-  grid-area: oPlus;
+#add {
+  grid-area: add;
 }
-#oDot {
-  grid-area: oDot;
+#decimal {
+  grid-area: decimal;
 }
-#oEquals {
-  grid-area: oEquals;
+#equals {
+  grid-area: equals;
 }
 
-#ac {
-  grid-area: ac;
+#clear {
+  grid-area: clear;
   color: var(--highlight-color);
   background: var(--lightest-color-offset);
 }
