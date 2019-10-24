@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
 import Buttons from "./Buttons.js";
+import Display from "./Display.js";
 
+const DISPLAY_DATA = [
+  { displayValue: "", displayLabel: "", id: "display", displayType: "display" },
+  { displayValue: "0", displayLabel: "0", id: "inp", displayType: "input" }
+];
 const DATA = [
-  { buttonValue: "", buttonLabel: "", id: "display", buttonType: "display" },
-  { buttonValue: "0", buttonLabel: "0", id: "inp", buttonType: "input" },
   { buttonValue: "0", buttonLabel: "AC", id: "clear", buttonType: "clear" },
   { buttonValue: "", buttonLabel: "/", id: "divide", buttonType: "operation" },
   {
@@ -29,7 +32,7 @@ const DATA = [
   { buttonValue: "1", buttonLabel: "1", id: "one", buttonType: "number" },
   { buttonValue: "2", buttonLabel: "2", id: "two", buttonType: "number" },
   { buttonValue: "3", buttonLabel: "3", id: "three", buttonType: "number" },
-  { buttonValue: "", buttonLabel: "=", id: "equals", buttonType: "number" },
+  { buttonValue: "", buttonLabel: "=", id: "equals", buttonType: "operation" },
   { buttonValue: "0", buttonLabel: "0", id: "zero", buttonType: "number" },
   { buttonValue: ".", buttonLabel: ".", id: "decimal", buttonType: "operation" }
 ];
@@ -43,15 +46,25 @@ export default class App extends Component {
   }
 
   updateDisplay = event => {
-    this.setState({
-      inputDisplay: this.state.inputDisplay + event.target.buttonValue
-    });
-    document.getElementById("inp").innerHTML = this.state.inputDisplay;
+    switch (true) {
+      case event.target.className === "number":
+        this.setState({
+          inputDisplay: this.state.inputDisplay + event.target.innerHTML
+        });
+        document.getElementById("inp").innerHTML = this.state.inputDisplay;
+        break;
+      default:
+        break;
+    }
   };
 
   render() {
     return (
       <div id="wrapper">
+        {DISPLAY_DATA.map(e => (
+          <Display displayID={e.id} displayLabel={this.state.inputDisplay} />
+        ))}
+
         {DATA.map(e => (
           <Buttons
             buttonID={e.id}
