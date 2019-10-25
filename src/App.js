@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Buttons from "./Buttons.js";
-import Display from "./Display.js";
 
-const DISPLAY_DATA = [
-  { displayValue: "", displayLabel: "", id: "display", displayType: "display" },
-  { displayValue: "0", displayLabel: "0", id: "inp", displayType: "input" }
-];
 const DATA = [
   { buttonValue: "0", buttonLabel: "AC", id: "clear", buttonType: "clear" },
   { buttonValue: "", buttonLabel: "/", id: "divide", buttonType: "operation" },
@@ -41,29 +36,43 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      readoutDisplay: "0",
       inputDisplay: "0"
     };
   }
 
   updateDisplay = event => {
+    let inp = this.state.inputDisplay;
+    if (inp.charAt() === "0" && inp.charAt(1) !== ".") {
+      while (inp.charAt(0) === "0") {
+        inp = inp.substr(1);
+      }
+
+      this.setState({ inputDisplay: inp });
+    }
+
     switch (true) {
       case event.target.className === "number":
         this.setState({
           inputDisplay: this.state.inputDisplay + event.target.innerHTML
         });
-        document.getElementById("inp").innerHTML = this.state.inputDisplay;
+
+        break;
+
+      case event.target.id === "clear":
+        this.setState({ readoutDisplay: "0", inputDisplay: "0" });
         break;
       default:
         break;
     }
+    document.getElementById("inp").innerHTML = this.state.inputDisplay;
   };
 
   render() {
     return (
       <div id="wrapper">
-        {DISPLAY_DATA.map(e => (
-          <Display displayID={e.id} displayLabel={this.state.inputDisplay} />
-        ))}
+        <div id="display">{this.state.readoutDisplay}</div>
+        <div id="inp">{this.state.inputDisplay}</div>
 
         {DATA.map(e => (
           <Buttons
