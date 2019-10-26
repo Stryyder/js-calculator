@@ -27,9 +27,9 @@ const DATA = [
   { buttonValue: "1", buttonLabel: "1", id: "one", buttonType: "number" },
   { buttonValue: "2", buttonLabel: "2", id: "two", buttonType: "number" },
   { buttonValue: "3", buttonLabel: "3", id: "three", buttonType: "number" },
-  { buttonValue: "", buttonLabel: "=", id: "equals", buttonType: "operation" },
+  { buttonValue: "", buttonLabel: "=", id: "equals", buttonType: "equals" },
   { buttonValue: "0", buttonLabel: "0", id: "zero", buttonType: "number" },
-  { buttonValue: ".", buttonLabel: ".", id: "decimal", buttonType: "operation" }
+  { buttonValue: ".", buttonLabel: ".", id: "decimal", buttonType: "decimal" }
 ];
 
 export default class App extends Component {
@@ -37,35 +37,53 @@ export default class App extends Component {
     super(props);
     this.state = {
       readoutDisplay: "0",
-      inputDisplay: "0"
+      inputDisplay: "0",
+      decimalAdded: false,
+      previousKeyEntered: "number"
     };
   }
 
-  updateDisplay = event => {
-    let inp = this.state.inputDisplay;
-    if (inp.charAt() === "0" && inp.charAt(1) !== ".") {
-      while (inp.charAt(0) === "0") {
-        inp = inp.substr(1);
-      }
+  calculateResults = inputString => {
+    console.log(inputString);
+  };
 
-      this.setState({ inputDisplay: inp });
-    }
-
+  processInput = event => {
+    let inp = this.state.inputDisplay + event.target.innerHTML;
+    console.log(inp);
     switch (true) {
       case event.target.className === "number":
+        this.setState({ inputDisplay: inp, previousKeyEntered: "number" });
+        break;
+
+      case event.target.className === "decimal" &&
+        this.state.decimalAdded === false:
         this.setState({
-          inputDisplay: this.state.inputDisplay + event.target.innerHTML
+          inputDisplay: inp,
+          decimalAdded: true,
+          previousKeyEntered: "decimal"
+        });
+        break;
+
+      case event.target.className === "operator" &&
+        this.state.previousKeyEntered !== "operator":
+        this.setState({
+          inputDisplay: inp,
+          previousKeyEntered: "operator"
         });
 
+        break;
+
+      case event.target.className === "equals":
+        this.calculateResults(inp);
         break;
 
       case event.target.id === "clear":
         this.setState({ readoutDisplay: "0", inputDisplay: "0" });
         break;
+
       default:
         break;
     }
-    document.getElementById("inp").innerHTML = this.state.inputDisplay;
   };
 
   render() {
@@ -74,13 +92,13 @@ export default class App extends Component {
         <div id="display">{this.state.readoutDisplay}</div>
         <div id="inp">{this.state.inputDisplay}</div>
 
-        {DATA.map(e => (
+        {DATA.map(i => (
           <Buttons
-            buttonID={e.id}
-            buttonLabel={e.buttonLabel}
-            buttonValue={e.buttonValue}
-            buttonType={e.buttonType}
-            handleClick={this.updateDisplay}
+            buttonID={i.id}
+            buttonLabel={i.buttonLabel}
+            buttonValue={i.buttonValue}
+            buttonType={i.buttonType}
+            handleClick={this.processInput}
             key={Math.random()}
           />
         ))}
