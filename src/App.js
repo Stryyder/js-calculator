@@ -49,7 +49,10 @@ export default class App extends Component {
 
   processInput = event => {
     let inp = this.state.inputDisplay + event.target.innerHTML;
-    console.log(inp);
+    // let readout = document.getElementById("display");
+
+    inp = parseInt(inp, 10);
+
     switch (true) {
       case event.target.className === "number":
         this.setState({ inputDisplay: inp, previousKeyEntered: "number" });
@@ -78,7 +81,12 @@ export default class App extends Component {
         break;
 
       case event.target.id === "clear":
-        this.setState({ readoutDisplay: "0", inputDisplay: "0" });
+        this.setState({
+          readoutDisplay: "0",
+          inputDisplay: "0",
+          decimalAdded: false,
+          previousKeyEntered: "number"
+        });
         break;
 
       default:
