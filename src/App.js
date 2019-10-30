@@ -38,40 +38,49 @@ export default class App extends Component {
     this.state = {
       readoutDisplay: "0",
       inputDisplay: "0",
+      inputCharacter: "",
       decimalAdded: false,
       previousKeyEntered: "number"
     };
   }
 
   calculateResults = inputString => {
-    console.log(inputString);
+    //let readout = document.getElementById("display");
   };
 
   processInput = event => {
-    let inp = this.state.inputDisplay + event.target.innerHTML;
-    // let readout = document.getElementById("display");
+    let keyEntered = event.target.innerHTML;
+    let inp = this.state.inputDisplay + keyEntered;
 
-    inp = parseInt(inp, 10);
+    if (inp.charAt() === "0" && inp.charAt(1) !== ".") {
+      inp = parseInt(inp, 10);
+    }
 
     switch (true) {
       case event.target.className === "number":
-        this.setState({ inputDisplay: inp, previousKeyEntered: "number" });
+        this.setState({
+          inputDisplay: inp,
+          inputCharacter: keyEntered,
+          previousKeyEntered: "number"
+        });
         break;
 
       case event.target.className === "decimal" &&
         this.state.decimalAdded === false:
         this.setState({
           inputDisplay: inp,
+          inputCharacter: keyEntered,
           decimalAdded: true,
           previousKeyEntered: "decimal"
         });
         break;
 
-      case event.target.className === "operator" &&
-        this.state.previousKeyEntered !== "operator":
+      case event.target.className === "operation" &&
+        this.state.previousKeyEntered !== "operation":
         this.setState({
           inputDisplay: inp,
-          previousKeyEntered: "operator"
+          inputCharacter: keyEntered,
+          previousKeyEntered: "operation"
         });
 
         break;
@@ -84,6 +93,7 @@ export default class App extends Component {
         this.setState({
           readoutDisplay: "0",
           inputDisplay: "0",
+          inputCharacter: "",
           decimalAdded: false,
           previousKeyEntered: "number"
         });
@@ -97,8 +107,8 @@ export default class App extends Component {
   render() {
     return (
       <div id="wrapper">
-        <div id="display">{this.state.readoutDisplay}</div>
-        <div id="inp">{this.state.inputDisplay}</div>
+        <div id="display">{this.state.inputDisplay}</div>
+        <div id="inp">{this.state.inputCharacter}</div>
 
         {DATA.map(i => (
           <Buttons
