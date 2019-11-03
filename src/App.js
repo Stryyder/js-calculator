@@ -38,7 +38,7 @@ export default class App extends Component {
     this.state = {
       readoutDisplay: "0",
       inputDisplay: "0",
-      inputCharacter: "",
+
       decimalAdded: false,
       previousKeyEntered: "number"
     };
@@ -60,7 +60,7 @@ export default class App extends Component {
       case event.target.className === "number":
         this.setState({
           inputDisplay: inp,
-          inputCharacter: keyEntered,
+          readoutDisplay: this.state.readoutDisplay + keyEntered,
           previousKeyEntered: "number"
         });
         break;
@@ -69,7 +69,7 @@ export default class App extends Component {
         this.state.decimalAdded === false:
         this.setState({
           inputDisplay: inp,
-          inputCharacter: keyEntered,
+          readoutDisplay: this.state.readoutDisplay + keyEntered,
           decimalAdded: true,
           previousKeyEntered: "decimal"
         });
@@ -78,22 +78,22 @@ export default class App extends Component {
       case event.target.className === "operation" &&
         this.state.previousKeyEntered !== "operation":
         this.setState({
-          inputDisplay: inp,
-          inputCharacter: keyEntered,
+          inputDisplay: keyEntered,
+          readoutDisplay: this.state.readoutDisplay + keyEntered,
           previousKeyEntered: "operation"
         });
 
         break;
 
       case event.target.className === "equals":
-        this.calculateResults(inp);
+        this.calculateResults(inp); // update state with calculation
         break;
 
       case event.target.id === "clear":
         this.setState({
           readoutDisplay: "0",
           inputDisplay: "0",
-          inputCharacter: "",
+
           decimalAdded: false,
           previousKeyEntered: "number"
         });
@@ -107,9 +107,10 @@ export default class App extends Component {
   render() {
     return (
       <div id="wrapper">
-        <div id="display">{this.state.inputDisplay}</div>
-        <div id="inp">{this.state.inputCharacter}</div>
-
+        <div id="readout">
+          <div id="display">{this.state.readoutDisplay}</div>
+          <div id="inp">{this.state.inputDisplay}</div>
+        </div>
         {DATA.map(i => (
           <Buttons
             buttonID={i.id}
