@@ -36,17 +36,18 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      readoutDisplay: "0",
+      readoutDisplay: "",
       inputDisplay: "0",
-
-      decimalAdded: false,
-      previousKeyEntered: "number"
+      previousKeyEntered: "number",
+      decimalCleared: true
     };
   }
 
   calculateResults = inputString => {
-    //let readout = document.getElementById("display");
+    //this.state.readoutDisplay;
   };
+
+  removeDuplicateEntries = inp => {};
 
   processInput = event => {
     let keyEntered = event.target.innerHTML;
@@ -66,12 +67,13 @@ export default class App extends Component {
         break;
 
       case event.target.className === "decimal" &&
-        this.state.decimalAdded === false:
+        this.state.previousKeyEntered !== "decimal" &&
+        this.state.decimalCleared === true:
         this.setState({
           inputDisplay: inp,
           readoutDisplay: this.state.readoutDisplay + keyEntered,
-          decimalAdded: true,
-          previousKeyEntered: "decimal"
+          previousKeyEntered: "decimal",
+          decimalCleared: false
         });
         break;
 
@@ -80,12 +82,16 @@ export default class App extends Component {
         this.setState({
           inputDisplay: keyEntered,
           readoutDisplay: this.state.readoutDisplay + keyEntered,
-          previousKeyEntered: "operation"
+          previousKeyEntered: "operation",
+          decimalCleared: true
         });
 
         break;
 
       case event.target.className === "equals":
+        this.setState({
+          decimalCleared: true
+        });
         this.calculateResults(inp); // update state with calculation
         break;
 
@@ -93,8 +99,7 @@ export default class App extends Component {
         this.setState({
           readoutDisplay: "0",
           inputDisplay: "0",
-
-          decimalAdded: false,
+          decimalCleared: true,
           previousKeyEntered: "number"
         });
         break;
