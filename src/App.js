@@ -36,7 +36,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      readoutDisplay: "",
+      readoutDisplay: "0",
       inputDisplay: "0",
       previousKeyEntered: "number",
       decimalCleared: true
