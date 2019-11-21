@@ -31,6 +31,7 @@ const DATA = [
   { buttonValue: "0", buttonLabel: "0", id: "zero", buttonType: "number" },
   { buttonValue: ".", buttonLabel: ".", id: "decimal", buttonType: "decimal" }
 ];
+var Parser = require("expr-eval").Parser;
 
 export default class App extends Component {
   constructor(props) {
@@ -43,10 +44,13 @@ export default class App extends Component {
     };
   }
 
-  calculateResults = inputString => {
-    //this.state.readoutDisplay;
+  calculateResults = () => {
+    let expr = Parser.parse(this.state.readoutDisplay);
+    this.setState({
+      readoutDisplay: this.state.readoutDisplay + " = " + expr.evaluate({}),
+      inputDisplay: expr.evaluate({})
+    });
   };
-
   removeDuplicateEntries = inp => {};
 
   processInput = event => {
@@ -113,8 +117,8 @@ export default class App extends Component {
     return (
       <div id="wrapper">
         <div id="readout">
-          <div id="display">{this.state.readoutDisplay}</div>
-          <div id="inp">{this.state.inputDisplay}</div>
+          <div id="inp">{this.state.readoutDisplay}</div>
+          <div id="display">{this.state.inputDisplay}</div>
         </div>
         {DATA.map(i => (
           <Buttons
