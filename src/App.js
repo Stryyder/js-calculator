@@ -3,7 +3,7 @@ import "./App.css";
 import Buttons from "./Buttons.js";
 
 const DATA = [
-  { buttonValue: "0", buttonLabel: "AC", id: "clear", buttonType: "clear" },
+  { buttonValue: "", buttonLabel: "AC", id: "clear", buttonType: "clear" },
   { buttonValue: "", buttonLabel: "/", id: "divide", buttonType: "operation" },
   {
     buttonValue: "",
@@ -54,18 +54,13 @@ export default class App extends Component {
   removeDuplicateEntries = inp => {};
 
   processInput = event => {
-    let keyEntered = event.target.innerHTML;
-
-    if (keyEntered === "AC") {
-      this.setState({
-        readoutDisplay: "0",
-        inputDisplay: "0",
-        decimalCleared: true,
-        previousKeyEntered: "number"
-      });
+    // exit immediately on first load of component as no input provided yet
+    if (event === undefined) {
       return;
     }
 
+    // setup shortcut references
+    let keyEntered = event.target.innerHTML;
     let inp = this.state.inputDisplay + keyEntered;
 
     // remove leading zeros from input unless it's decimalized
@@ -75,6 +70,7 @@ export default class App extends Component {
 
     // react (get it?) to any type of input we could get
     switch (true) {
+      // any number is entered
       case event.target.className === "number":
         this.setState({
           inputDisplay: inp,
@@ -83,6 +79,7 @@ export default class App extends Component {
         });
         break;
 
+      // decimal key is pressed
       case event.target.className === "decimal" &&
         this.state.previousKeyEntered !== "decimal" &&
         this.state.decimalCleared === true:
@@ -94,6 +91,7 @@ export default class App extends Component {
         });
         break;
 
+      // any math key is pressed
       case event.target.className === "operation" &&
         this.state.previousKeyEntered !== "operation":
         this.setState({
@@ -105,6 +103,7 @@ export default class App extends Component {
 
         break;
 
+      // equals key is pressed
       case event.target.className === "equals":
         this.setState({
           decimalCleared: true
@@ -112,6 +111,7 @@ export default class App extends Component {
         this.calculateResults(inp); // update state with calculation
         break;
 
+      // AC button is pressed
       case event.target.id === "clear":
         this.setState({
           readoutDisplay: "0",
@@ -119,7 +119,7 @@ export default class App extends Component {
           decimalCleared: true,
           previousKeyEntered: "number"
         });
-        console.log(this.state.inputDisplay);
+        console.log("processInput says: " + this.state.inputDisplay);
         break;
 
       default:
@@ -131,9 +131,10 @@ export default class App extends Component {
     return (
       <div id="wrapper">
         <div id="readout">
+          {this.processInput()}
           <div id="inp">{this.state.readoutDisplay}</div>
           <div id="display">{this.state.inputDisplay}</div>
-          {console.log(this.state.inputDisplay)}
+          {console.log("component says: " + this.state.inputDisplay)}
         </div>
         {DATA.map(i => (
           <Buttons
