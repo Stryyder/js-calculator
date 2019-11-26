@@ -55,12 +55,25 @@ export default class App extends Component {
 
   processInput = event => {
     let keyEntered = event.target.innerHTML;
+
+    if (keyEntered === "AC") {
+      this.setState({
+        readoutDisplay: "0",
+        inputDisplay: "0",
+        decimalCleared: true,
+        previousKeyEntered: "number"
+      });
+      return;
+    }
+
     let inp = this.state.inputDisplay + keyEntered;
 
+    // remove leading zeros from input unless it's decimalized
     if (inp.charAt() === "0" && inp.charAt(1) !== ".") {
       inp = parseInt(inp, 10);
     }
 
+    // react (get it?) to any type of input we could get
     switch (true) {
       case event.target.className === "number":
         this.setState({
@@ -106,6 +119,7 @@ export default class App extends Component {
           decimalCleared: true,
           previousKeyEntered: "number"
         });
+        console.log(this.state.inputDisplay);
         break;
 
       default:
@@ -119,6 +133,7 @@ export default class App extends Component {
         <div id="readout">
           <div id="inp">{this.state.readoutDisplay}</div>
           <div id="display">{this.state.inputDisplay}</div>
+          {console.log(this.state.inputDisplay)}
         </div>
         {DATA.map(i => (
           <Buttons
