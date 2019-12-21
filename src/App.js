@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Buttons from "./Buttons.js";
-
+const MATH = require("mathjs");
 const DATA = [
   { buttonValue: "0", buttonLabel: "AC", id: "clear", buttonType: "clear" },
   { buttonValue: "", buttonLabel: "/", id: "divide", buttonType: "operation" },
@@ -40,18 +40,20 @@ export default class App extends Component {
       inputDisplay: "0",
       previousKeyEntered: "number",
       decimalCleared: true,
-      runningTotal: "0"
+      runningTotal: "0",
+      previousOperation: "",
+      currentOperation: ""
     };
   }
 
   calculateResults = expr => {
-    console.log(expr); // 65+34/32-12*34*3
-    // multiply and divide first (left to right)
-    // then go left to right
-    let exprNumbers = [];
-    let currentNum = [];
+    console.log(expr);
 
-    for (let i = 0; i < expr.length; i++) {}
+    // The sequence "5 * - 5" = should produce an output of "-25" : expected '25' to equal '-25'
+    this.setState({
+      inputDisplay: MATH.evaluate(expr),
+      readoutDisplay: ""
+    });
   };
 
   processInput = event => {
