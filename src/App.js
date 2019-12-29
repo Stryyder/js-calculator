@@ -90,8 +90,7 @@ export default class App extends Component {
         break;
 
       // any math key is pressed
-      case event.target.className === "operation" &&
-        this.state.previousKeyEntered !== "operation":
+      case event.target.className === "operation": //&& this.state.previousKeyEntered !== "operation":
         this.setState({
           inputDisplay: keyEntered,
           readoutDisplay: this.state.readoutDisplay + keyEntered,
