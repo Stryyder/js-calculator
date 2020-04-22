@@ -9,7 +9,7 @@ const DATA = [
     buttonValue: "",
     buttonLabel: "*",
     id: "multiply",
-    buttonType: "operation"
+    buttonType: "operation",
   },
   { buttonValue: "7", buttonLabel: "7", id: "seven", buttonType: "number" },
   { buttonValue: "8", buttonLabel: "8", id: "eight", buttonType: "number" },
@@ -18,7 +18,7 @@ const DATA = [
     buttonValue: "",
     buttonLabel: "-",
     id: "subtract",
-    buttonType: "operation"
+    buttonType: "operation",
   },
   { buttonValue: "4", buttonLabel: "4", id: "four", buttonType: "number" },
   { buttonValue: "5", buttonLabel: "5", id: "five", buttonType: "number" },
@@ -29,7 +29,7 @@ const DATA = [
   { buttonValue: "3", buttonLabel: "3", id: "three", buttonType: "number" },
   { buttonValue: "", buttonLabel: "=", id: "equals", buttonType: "equals" },
   { buttonValue: "0", buttonLabel: "0", id: "zero", buttonType: "number" },
-  { buttonValue: ".", buttonLabel: ".", id: "decimal", buttonType: "decimal" }
+  { buttonValue: ".", buttonLabel: ".", id: "decimal", buttonType: "decimal" },
 ];
 
 export default class App extends Component {
@@ -40,23 +40,24 @@ export default class App extends Component {
       inputDisplay: "0",
       previousKeyEntered: "number",
       decimalCleared: true,
-      runningTotal: "0",
-      previousOperation: "",
-      currentOperation: ""
+      numOperationsEntered: 0,
+      resultOfPreviousCalculation: 0,
     };
   }
+  // The sequence "5 * - + 5" = should produce an output of "10"
+  // if multiple operators, alter expr to accept only last
 
-  calculateResults = expr => {
+  calculateResults = (expr) => {
     console.log(expr);
 
-    // The sequence "5 * - 5" = should produce an output of "-25" : expected '25' to equal '-25'
     this.setState({
       inputDisplay: MATH.evaluate(expr),
-      readoutDisplay: ""
+      readoutDisplay: "",
+      resultOfPreviousCalculation: MATH.evaluate(expr),
     });
   };
 
-  processInput = event => {
+  processInput = (event) => {
     // setup shortcut references
     let keyEntered = event.target.innerHTML;
     let inp = this.state.inputDisplay + keyEntered;
@@ -73,7 +74,7 @@ export default class App extends Component {
         this.setState({
           inputDisplay: inp,
           readoutDisplay: this.state.readoutDisplay + keyEntered,
-          previousKeyEntered: "number"
+          previousKeyEntered: "number",
         });
         break;
 
@@ -85,25 +86,46 @@ export default class App extends Component {
           inputDisplay: inp,
           readoutDisplay: this.state.readoutDisplay + keyEntered,
           previousKeyEntered: "decimal",
-          decimalCleared: false
+          decimalCleared: false,
         });
         break;
 
       // any math key is pressed
       case event.target.className === "operation": //&& this.state.previousKeyEntered !== "operation":
-        this.setState({
-          inputDisplay: keyEntered,
-          readoutDisplay: this.state.readoutDisplay + keyEntered,
-          previousKeyEntered: "operation",
-          decimalCleared: true
-        });
+        // if (this.state.previousKeyEntered === "operation"){ // use only last operator keyed in as per project guidelines
+        //   this.setState({numOperationsEntered: this.state.numOperationsEntered++});
+        //     if (this.state.numOperationsEntered >=3){
+        //       this.setState({numOperationsEntered: 0});
+        //     }
+        // }
+        // else {
+
+        if (this.state.previousKeyEntered === "equals") {
+          this.setState({
+            inputDisplay: this.state.resultOfPreviousCalculation + keyEntered,
+            readoutDisplay:
+              this.state.readoutDisplay +
+              this.state.resultOfPreviousCalculation +
+              keyEntered,
+            previousKeyEntered: "operation",
+            decimalCleared: true,
+          });
+        } else {
+          this.setState({
+            inputDisplay: keyEntered,
+            readoutDisplay: this.state.readoutDisplay + keyEntered,
+            previousKeyEntered: "operation",
+            decimalCleared: true,
+          });
+        }
 
         break;
 
       // equals key is pressed  // update state with calculation
       case event.target.className === "equals":
         this.setState({
-          decimalCleared: true
+          decimalCleared: true,
+          previousKeyEntered: "equals",
         });
 
         this.calculateResults(this.state.readoutDisplay);
@@ -116,7 +138,7 @@ export default class App extends Component {
           readoutDisplay: "",
           inputDisplay: "0",
           decimalCleared: true,
-          previousKeyEntered: "number"
+          previousKeyEntered: "number",
         });
 
         break;
@@ -133,7 +155,7 @@ export default class App extends Component {
           <div id="inp">{this.state.readoutDisplay}</div>
           <div id="display">{this.state.inputDisplay}</div>
         </div>
-        {DATA.map(i => (
+        {DATA.map((i) => (
           <Buttons
             buttonID={i.id}
             buttonLabel={i.buttonLabel}
