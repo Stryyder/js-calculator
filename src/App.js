@@ -40,18 +40,20 @@ export default class App extends Component {
       inputDisplay: "0",
       previousKeyEntered: "number",
       decimalCleared: true,
-      numOperationsEntered: 0,
+      lastOperationEntered: "",
       resultOfPreviousCalculation: 0,
     };
   }
-  // The sequence "5 * - + 5" = should produce an output of "10"
-  // if multiple operators, alter expr to accept only last
-
   calculateResults = (expr) => {
     console.log(expr);
 
+    // reg expression to fix >3 operators
+    let equationToSolve = expr;
+    let regex = /\s?[-|+|*|\\|\s?]{3,}\s?/gm;
+    equationToSolve = expr.replace(regex, this.state.lastOperationEntered);
+
     this.setState({
-      inputDisplay: MATH.evaluate(expr),
+      inputDisplay: MATH.evaluate(equationToSolve),
       readoutDisplay: "",
       resultOfPreviousCalculation: MATH.evaluate(expr),
     });
@@ -90,16 +92,7 @@ export default class App extends Component {
         });
         break;
 
-      // any math key is pressed
-      case event.target.className === "operation": //&& this.state.previousKeyEntered !== "operation":
-        // if (this.state.previousKeyEntered === "operation"){ // use only last operator keyed in as per project guidelines
-        //   this.setState({numOperationsEntered: this.state.numOperationsEntered++});
-        //     if (this.state.numOperationsEntered >=3){
-        //       this.setState({numOperationsEntered: 0});
-        //     }
-        // }
-        // else {
-
+      case event.target.className === "operation":
         if (this.state.previousKeyEntered === "equals") {
           this.setState({
             inputDisplay: this.state.resultOfPreviousCalculation + keyEntered,
@@ -109,6 +102,7 @@ export default class App extends Component {
               keyEntered,
             previousKeyEntered: "operation",
             decimalCleared: true,
+            lastOperationEntered: keyEntered,
           });
         } else {
           this.setState({
@@ -116,6 +110,7 @@ export default class App extends Component {
             readoutDisplay: this.state.readoutDisplay + keyEntered,
             previousKeyEntered: "operation",
             decimalCleared: true,
+            lastOperationEntered: keyEntered,
           });
         }
 
